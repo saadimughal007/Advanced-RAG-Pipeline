@@ -1,0 +1,64 @@
+CONCEPT
+
+Request validation ensures that incoming API data follows the expected structure, types, and rules.
+
+EXPLANATION
+
+FastAPI commonly uses Pydantic models for validating request and response data.
+
+A schema can define fields such as name, email, age, and other constraints.
+
+If incoming data does not satisfy the schema, FastAPI can automatically return a validation error.
+
+EXAMPLES
+
+A user creation request may require:
+
+name: string
+email: valid email
+age: integer
+
+The backend can reject invalid data before passing it to business logic.
+
+ADVANTAGES
+
+Automatic validation.
+Clear data models.
+Better API documentation.
+Type safety.
+Reduced manual validation code.
+
+LIMITATIONS
+
+Validation schemas must still be designed correctly.
+Business rules may require additional validation.
+Complex validation can become difficult to maintain.
+
+COMMON MISTAKES
+
+Trusting client input without validation.
+Using incorrect field types.
+Mixing database models with API schemas.
+Returning sensitive fields.
+Ignoring validation errors.
+
+USE CASES
+
+User registration
+Login requests
+Payment APIs
+AI application inputs
+CRUD APIs
+Data processing services
+
+RELATED CONCEPTS
+
+Pydantic
+BaseModel
+Field
+Type hints
+Request models
+Response models
+Serialization
+JSON
+FastAPI

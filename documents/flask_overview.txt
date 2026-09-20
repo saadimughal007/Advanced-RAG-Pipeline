@@ -1,0 +1,60 @@
+CONCEPT
+
+Flask is a lightweight Python web framework commonly used for web applications and APIs.
+
+EXPLANATION
+
+Flask provides a minimal core and allows developers to add functionality through extensions and additional libraries.
+
+Compared with larger frameworks, Flask gives developers more freedom over application structure.
+
+EXAMPLES
+
+A Flask application can expose:
+
+GET /users
+
+and return JSON data.
+
+Flask can be extended with libraries for authentication, databases, validation, and other backend requirements.
+
+ADVANTAGES
+
+Lightweight.
+Flexible.
+Simple core.
+Large ecosystem.
+Good for small services and APIs.
+
+LIMITATIONS
+
+Developers often need to choose additional libraries.
+Large applications require careful architecture.
+Many features are not included in the minimal core.
+
+COMMON MISTAKES
+
+Creating an unstructured large Flask application.
+Adding too many extensions without clear architecture.
+Mixing route logic and database logic.
+Ignoring validation and authentication.
+
+USE CASES
+
+REST APIs
+Small backend services
+Prototypes
+Web applications
+Internal tools
+Microservices
+
+RELATED CONCEPTS
+
+Python
+FastAPI
+Django
+REST
+WSGI
+API routing
+Extensions
+JSON

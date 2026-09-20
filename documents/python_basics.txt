@@ -1,0 +1,65 @@
+CONCEPT
+
+Python is a high-level, general-purpose programming language used for backend development, automation, data science, artificial intelligence, scripting, and many other areas.
+
+EXPLANATION
+
+Python uses a readable syntax and supports multiple programming styles including object-oriented, procedural, and functional programming.
+
+Python provides a large ecosystem of libraries and frameworks. Developers can use Python for simple scripts as well as large backend applications.
+
+Important Python concepts include variables, functions, classes, objects, exceptions, modules, packages, type hints, asynchronous programming, and file handling.
+
+EXAMPLES
+
+A simple Python function:
+
+def add_numbers(a, b):
+    return a + b
+
+Python can also be used to create backend applications using frameworks such as FastAPI, Flask, and Django.
+
+ADVANTAGES
+
+Python has readable syntax.
+Python has a large ecosystem.
+Python is widely used in AI and automation.
+Python supports object-oriented programming.
+Python has strong community support.
+Python integrates with APIs, databases, and AI services.
+
+LIMITATIONS
+
+Python can be slower than some compiled languages for CPU-intensive workloads.
+Python applications can consume significant memory.
+Python requires careful dependency management in larger projects.
+
+COMMON MISTAKES
+
+Beginners often create very large files instead of separating code into modules.
+Developers may ignore type hints in large projects.
+Developers may store API keys directly in source code.
+Developers may not handle exceptions properly.
+Developers may create blocking code inside asynchronous applications.
+
+USE CASES
+
+Backend development
+AI applications
+Automation
+Data processing
+Web APIs
+Scripting
+Machine learning
+
+RELATED CONCEPTS
+
+FastAPI
+Flask
+Django
+AsyncIO
+REST APIs
+Type hints
+Pydantic
+Databases
+LangChain

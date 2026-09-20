@@ -1,0 +1,66 @@
+CONCEPT
+
+Django is a high-level Python web framework designed for building full-featured web applications.
+
+EXPLANATION
+
+Django follows a batteries-included approach and provides many built-in features such as an ORM, authentication, admin interface, routing, middleware, and security features.
+
+Django can also be used to build APIs, especially when combined with Django REST Framework.
+
+EXAMPLES
+
+A Django application can contain:
+
+Users
+Products
+Orders
+Authentication
+Admin interface
+Database models
+
+Django REST Framework can expose these resources through REST APIs.
+
+ADVANTAGES
+
+Large built-in feature set.
+Powerful ORM.
+Built-in admin interface.
+Authentication support.
+Strong security features.
+Good for large web applications.
+
+LIMITATIONS
+
+Can be heavier than lightweight frameworks.
+Requires understanding Django's architecture.
+May provide more functionality than needed for a very small API.
+
+COMMON MISTAKES
+
+Using Django for a tiny service without considering complexity.
+Putting too much logic in views.
+Ignoring database query optimization.
+Not understanding middleware and ORM behavior.
+
+USE CASES
+
+Large web applications
+Content management systems
+Enterprise applications
+REST APIs
+Admin-heavy applications
+Database-driven systems
+
+RELATED CONCEPTS
+
+Python
+Django REST Framework
+ORM
+Models
+Views
+Middleware
+Authentication
+PostgreSQL
+FastAPI
+Flask

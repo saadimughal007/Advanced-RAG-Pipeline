@@ -1,0 +1,69 @@
+CONCEPT
+
+FastAPI routing defines how an API responds to different HTTP requests and URL paths.
+
+EXPLANATION
+
+A route connects an HTTP method and URL path to a Python function.
+
+Common HTTP methods include GET, POST, PUT, PATCH, and DELETE.
+
+Routes should generally represent resources rather than arbitrary actions.
+
+EXAMPLES
+
+GET /users
+GET /users/10
+POST /users
+PATCH /users/10
+DELETE /users/10
+
+A route can also use path parameters:
+
+GET /users/{user_id}
+
+FastAPI can automatically convert and validate typed path parameters.
+
+ADVANTAGES
+
+Clear API structure.
+Automatic validation.
+Easy parameter handling.
+Automatic documentation.
+Supports modular routers.
+
+LIMITATIONS
+
+Poorly designed routes can make APIs difficult to understand.
+Too much logic inside routes reduces maintainability.
+Large applications require proper router organization.
+
+COMMON MISTAKES
+
+Using inconsistent URL naming.
+Putting business logic directly inside routes.
+Using the wrong HTTP method.
+Ignoring status codes.
+Creating duplicate routes.
+Returning inconsistent response structures.
+
+USE CASES
+
+User management APIs
+Product APIs
+Authentication APIs
+AI chat APIs
+Order management systems
+CRUD applications
+
+RELATED CONCEPTS
+
+HTTP methods
+REST
+Path parameters
+Query parameters
+Request body
+Response models
+APIRouter
+Status codes
+OpenAPI

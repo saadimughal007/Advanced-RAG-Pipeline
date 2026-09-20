@@ -1,0 +1,69 @@
+CONCEPT
+
+A database stores and manages application data so that backend systems can persist information across requests and sessions.
+
+EXPLANATION
+
+Backend applications commonly use relational databases such as PostgreSQL and MySQL.
+
+Relational databases organize data into tables with rows and columns.
+
+Applications communicate with databases through queries or database libraries.
+
+EXAMPLES
+
+A user table may contain:
+
+id
+name
+email
+created_at
+
+A backend can retrieve a user using their ID and return the information through an API.
+
+ADVANTAGES
+
+Persistent data storage.
+Transactions.
+Relationships between data.
+Query capabilities.
+Indexes for faster searches.
+Strong consistency options.
+
+LIMITATIONS
+
+Database design requires planning.
+Poor queries can reduce performance.
+Scaling databases can become complex.
+Incorrect indexing can cause slow queries.
+
+COMMON MISTAKES
+
+Storing passwords as plain text.
+Creating unnecessary duplicate data.
+Ignoring indexes.
+Running inefficient queries.
+Putting raw database queries everywhere.
+Not using transactions when required.
+
+USE CASES
+
+User management
+E-commerce
+SaaS applications
+AI chat history
+CRM systems
+Financial applications
+Content management
+
+RELATED CONCEPTS
+
+PostgreSQL
+SQL
+ORM
+SQLAlchemy
+Database indexing
+Transactions
+Redis
+Vector databases
+FastAPI

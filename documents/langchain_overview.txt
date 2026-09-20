@@ -1,0 +1,82 @@
+CONCEPT
+
+LangChain is a framework for developing applications that use language models together with prompts, tools, retrievers, structured output, memory, and other components.
+
+EXPLANATION
+
+A language model by itself mainly generates responses.
+
+LangChain allows developers to connect the model with external application components.
+
+For example:
+
+User question
+→ Retriever
+→ Relevant documents
+→ Prompt
+→ LLM
+→ Answer
+
+LangChain also supports concepts such as LCEL, document loaders, text splitters, embeddings, vector stores, retrievers, tools, and agents.
+
+EXAMPLES
+
+A RAG application can use:
+
+Document Loader
+→ Text Splitter
+→ Embedding Model
+→ Vector Database
+→ Retriever
+→ Prompt
+→ LLM
+
+An AI agent can use tools to interact with external systems.
+
+ADVANTAGES
+
+Reusable AI application components.
+Supports RAG pipelines.
+Supports tool calling.
+Supports structured output.
+Integrates with many model providers.
+Useful for prototyping and production AI systems.
+
+LIMITATIONS
+
+Framework abstractions can hide underlying behavior.
+APIs can change over time.
+Developers can become dependent on framework-specific patterns.
+Understanding HTTP, Python, APIs, databases, and LLM fundamentals is still necessary.
+
+COMMON MISTAKES
+
+Using LangChain without understanding the underlying LLM API.
+Creating unnecessarily complicated chains.
+Ignoring token and context limits.
+Using outdated LangChain syntax.
+Treating LangChain as the AI model itself.
+Failing to inspect retrieved documents in RAG systems.
+
+USE CASES
+
+RAG applications
+AI chatbots
+AI agents
+Document assistants
+Tool-using AI systems
+Structured data extraction
+AI automation
+
+RELATED CONCEPTS
+
+LLMs
+RAG
+Embeddings
+Vector databases
+Retrievers
+LCEL
+Prompt templates
+Tool calling
+Agents
+LangGraph

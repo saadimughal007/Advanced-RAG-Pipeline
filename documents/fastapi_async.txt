@@ -1,0 +1,64 @@
+CONCEPT
+
+Asynchronous programming allows a FastAPI application to handle waiting operations efficiently without blocking the entire server thread.
+
+EXPLANATION
+
+Async programming is particularly useful for I/O-bound operations such as API requests, database operations, network communication, and file operations.
+
+The async and await keywords are commonly used in Python asynchronous programming.
+
+An async function can pause while waiting for an external operation and allow other work to continue.
+
+EXAMPLES
+
+An AI backend may need to call:
+
+User request
+→ FastAPI
+→ LLM API
+→ Database
+→ External API
+
+If these operations are asynchronous, the server can handle other requests while waiting.
+
+ADVANTAGES
+
+Efficient handling of I/O-bound workloads.
+Useful for API-heavy applications.
+Works well with external AI APIs.
+Can improve concurrency.
+
+LIMITATIONS
+
+Async does not automatically make CPU-heavy operations faster.
+Blocking libraries can reduce async performance.
+Async code can be harder to understand for beginners.
+
+COMMON MISTAKES
+
+Using blocking functions inside async routes.
+Assuming async makes every operation faster.
+Forgetting await.
+Calling synchronous APIs incorrectly.
+Using CPU-heavy tasks directly inside async request handlers.
+
+USE CASES
+
+AI APIs
+External API integrations
+Real-time services
+WebSocket applications
+High-concurrency backend services
+
+RELATED CONCEPTS
+
+asyncio
+async
+await
+HTTP clients
+httpx
+FastAPI
+Concurrency
+I/O-bound operations
+CPU-bound operations

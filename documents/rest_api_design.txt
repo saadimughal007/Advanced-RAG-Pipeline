@@ -1,0 +1,83 @@
+CONCEPT
+
+REST API design is the practice of creating HTTP APIs that expose resources through predictable URLs, methods, status codes, and representations.
+
+EXPLANATION
+
+A REST-style API commonly represents resources using nouns.
+
+For example:
+
+/users
+/products
+/orders
+
+HTTP methods communicate the intended operation.
+
+GET retrieves data.
+POST creates data.
+PUT replaces data.
+PATCH partially updates data.
+DELETE removes data.
+
+EXAMPLES
+
+GET /users/10
+
+retrieves user 10.
+
+POST /users
+
+creates a new user.
+
+PATCH /users/10
+
+updates part of user 10.
+
+DELETE /users/10
+
+deletes user 10.
+
+ADVANTAGES
+
+Predictable API structure.
+Easy client integration.
+Works across programming languages.
+Uses standard HTTP concepts.
+Easy to document.
+
+LIMITATIONS
+
+REST does not define every detail of application architecture.
+Complex workflows may require careful endpoint design.
+Poor API design can create inconsistent interfaces.
+
+COMMON MISTAKES
+
+Using verbs unnecessarily in URLs.
+Ignoring HTTP status codes.
+Returning inconsistent JSON.
+Creating overly large endpoints.
+Mixing unrelated resources.
+Using GET requests for operations that modify data.
+
+USE CASES
+
+Web applications
+Mobile applications
+AI applications
+SaaS platforms
+Third-party integrations
+Microservices
+
+RELATED CONCEPTS
+
+HTTP
+JSON
+FastAPI
+Flask
+Django
+OpenAPI
+Status codes
+Authentication
+Webhooks

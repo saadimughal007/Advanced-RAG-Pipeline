@@ -1,0 +1,71 @@
+CONCEPT
+
+FastAPI is a modern Python web framework for building APIs and backend services.
+
+EXPLANATION
+
+FastAPI uses Python type hints to define and validate API data. It is built around ASGI and supports asynchronous programming.
+
+FastAPI automatically generates interactive API documentation using OpenAPI.
+
+FastAPI applications can receive JSON requests and return structured JSON responses.
+
+EXAMPLES
+
+A FastAPI endpoint can look conceptually like:
+
+GET /users
+
+The endpoint receives a request and returns a list of users.
+
+A FastAPI application can also expose AI endpoints such as:
+
+POST /chat
+
+The endpoint can receive a user question, call an AI model, and return the generated response.
+
+ADVANTAGES
+
+Automatic API documentation.
+Python type hints.
+Request validation.
+Async support.
+Good developer experience.
+Easy integration with databases and AI services.
+
+LIMITATIONS
+
+FastAPI does not automatically provide a complete application architecture.
+Developers still need to design authentication, databases, business logic, and deployment.
+Async code can become difficult if blocking libraries are used incorrectly.
+
+COMMON MISTAKES
+
+Putting all logic inside route functions.
+Using blocking operations inside async routes.
+Skipping request validation.
+Hardcoding API keys.
+Ignoring authentication.
+Not separating services and repositories.
+
+USE CASES
+
+REST APIs
+AI applications
+Microservices
+Backend services
+Machine learning APIs
+Real-time applications
+Internal APIs
+
+RELATED CONCEPTS
+
+Python
+ASGI
+Pydantic
+OpenAPI
+REST API
+Uvicorn
+PostgreSQL
+Authentication
+Dependency Injection

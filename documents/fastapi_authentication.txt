@@ -1,0 +1,71 @@
+CONCEPT
+
+Authentication verifies who a user is, while authorization determines what that authenticated user is allowed to access.
+
+EXPLANATION
+
+Backend applications commonly use authentication mechanisms such as sessions, API keys, OAuth2, and JWT-based authentication.
+
+A typical authentication flow is:
+
+User
+→ Login
+→ Credentials verified
+→ Token issued
+→ Token sent with future requests
+→ Backend verifies token
+
+Authentication and authorization should be treated as separate concepts.
+
+EXAMPLES
+
+A user logs into an application and receives an access token.
+
+The client then sends:
+
+Authorization: Bearer <token>
+
+The backend verifies the token before allowing access to protected resources.
+
+ADVANTAGES
+
+Protects private resources.
+Supports user-specific access.
+Works with web and mobile applications.
+Can integrate with OAuth2 providers.
+
+LIMITATIONS
+
+Authentication systems require careful security design.
+Poor token handling can create vulnerabilities.
+Passwords and secrets must never be stored insecurely.
+
+COMMON MISTAKES
+
+Storing plain-text passwords.
+Hardcoding secret keys.
+Not validating tokens.
+Confusing authentication with authorization.
+Returning sensitive information in API responses.
+Using long-lived tokens without appropriate controls.
+
+USE CASES
+
+User accounts
+Admin dashboards
+SaaS applications
+Mobile applications
+Private APIs
+AI applications with user accounts
+
+RELATED CONCEPTS
+
+JWT
+OAuth2
+API keys
+Sessions
+Authorization
+Password hashing
+FastAPI Security
+Access tokens
+Refresh tokens
