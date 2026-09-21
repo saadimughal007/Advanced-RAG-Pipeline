@@ -1,7 +1,11 @@
-import streamlit as st
-from rag.complete_advanced_rag import run_advanced_rag
-import time
+import asyncio
+import json
 from datetime import datetime
+
+import streamlit as st
+
+from rag.advanced_rag import run_advanced_rag
+
 
 # ============================================================
 # PAGE CONFIG
@@ -14,6 +18,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
 # ============================================================
 # CUSTOM CSS
 # ============================================================
@@ -21,509 +26,467 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Main theme */
-    :root {
-        --primary-color: #1f77b4;
-        --secondary-color: #ff7f0e;
-        --success-color: #2ca02c;
-        --danger-color: #d62728;
+    .main-title {
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 0.2rem;
     }
-    
-    /* Header styling */
-    .header-title {
-        font-size: 3rem;
-        font-weight: 900;
-        background: linear-gradient(90deg, #1f77b4, #ff7f0e);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 1rem;
+
+    .subtitle {
+        color: #777;
+        font-size: 1.05rem;
+        margin-bottom: 1.5rem;
     }
-    
-    .header-subtitle {
-        font-size: 1.2rem;
-        color: #666;
-        margin-bottom: 2rem;
-    }
-    
-    /* Metric cards */
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 1.5rem;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    
-    .metric-card-orange {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-    
-    .metric-card-green {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    }
-    
-    .metric-card-blue {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    }
-    
-    .metric-number {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin: 0.5rem 0;
-    }
-    
-    .metric-label {
-        font-size: 0.9rem;
-        opacity: 0.9;
-    }
-    
-    /* Pipeline stage styling */
-    .pipeline-stage {
-        background: white;
-        padding: 1rem;
-        border-left: 4px solid #1f77b4;
-        border-radius: 5px;
-        margin: 1rem 0;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .stage-title {
-        font-weight: bold;
-        font-size: 1.1rem;
-        color: #1f77b4;
-        margin-bottom: 0.5rem;
-    }
-    
-    .stage-content {
-        color: #333;
-        font-size: 0.95rem;
-    }
-    
-    /* Answer box */
+
     .answer-box {
         background: #f8f9fa;
-        padding: 2rem;
-        border-radius: 10px;
+        padding: 1.5rem;
+        border-radius: 12px;
         border-left: 5px solid #2ca02c;
-        margin: 2rem 0;
+        margin: 1rem 0;
     }
-    
-    .answer-text {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        color: #333;
-    }
-    
-    /* Source cards */
-    .source-card {
-        background: white;
+
+    .stage-box {
+        background: #f8f9fa;
         padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
+        border-radius: 10px;
         margin: 0.5rem 0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #e5e5e5;
     }
-    
-    .source-name {
-        font-weight: bold;
-        color: #1f77b4;
-        font-size: 0.95rem;
-    }
-    
-    /* Divider */
-    .divider {
-        border-top: 2px solid #e0e0e0;
-        margin: 2rem 0;
-    }
-    
-    /* Button styling */
-    .stButton > button {
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 1rem;
-        font-weight: bold;
+
+    .source-box {
+        background: #fafafa;
+        padding: 0.8rem 1rem;
         border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        border: 1px solid #e5e5e5;
+        margin: 0.4rem 0;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
+
 # ============================================================
 # SIDEBAR
 # ============================================================
 
 with st.sidebar:
-    st.markdown("### ⚙️ Configuration")
-    
-    st.markdown("---")
-    
-    st.markdown("#### About This App")
-    st.info(
+    st.markdown("## ⚙️ Advanced RAG")
+
+    st.markdown(
         """
-        **Advanced RAG Pipeline** combines:
-        - 🔄 Query Rewriting
-        - 📚 Multi-Query Retrieval
-        - 🎯 Reranking (CrossEncoder)
-        - ✂️ Context Compression
-        - 🧠 LLM-Powered Answers
-        
-        Perfect for Q&A over documents!
+        This application demonstrates an optimized RAG pipeline:
+
+        **1. Query Generation**
+
+        **2. Parallel Retrieval**
+
+        **3. Reranking**
+
+        **4. Parallel Compression**
+
+        **5. Final Answer**
         """
     )
-    
-    st.markdown("---")
-    
-    st.markdown("#### Technology Stack")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("**Backend:**")
-        st.write("• LangChain")
-        st.write("• ChromaDB")
-        st.write("• Gemini API")
-    with col2:
-        st.write("**Frontend:**")
-        st.write("• Streamlit")
-        st.write("• Python 3.11+")
-        st.write("• CrossEncoder")
-    
-    st.markdown("---")
-    
-    st.markdown("#### Links")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.link_button("GitHub", "https://github.com", use_container_width=True)
-    with col2:
-        st.link_button("LinkedIn", "https://linkedin.com", use_container_width=True)
-    with col3:
-        st.link_button("Portfolio", "https://portfolio.com", use_container_width=True)
+
+    st.divider()
+
+    st.markdown("### Technology Stack")
+    st.write("• LangChain")
+    st.write("• ChromaDB")
+    st.write("• Gemini")
+    st.write("• Sentence Transformers")
+    st.write("• CrossEncoder")
+    st.write("• Streamlit")
+
+    st.divider()
+
+    st.caption(
+        "Optimized Advanced RAG Pipeline"
+    )
+
 
 # ============================================================
-# MAIN CONTENT
+# HEADER
 # ============================================================
 
-# Header
-col1, col2 = st.columns([3, 1])
+col1, col2 = st.columns([4, 1])
+
 with col1:
     st.markdown(
-        '<div class="header-title">🚀 Advanced RAG Pipeline</div>',
+        '<div class="main-title">🚀 Advanced RAG Pipeline</div>',
         unsafe_allow_html=True,
     )
     st.markdown(
-        '<div class="header-subtitle">Intelligent Document Retrieval & Answer Generation</div>',
+        '<div class="subtitle">'
+        "Intelligent Document Retrieval & Answer Generation"
+        "</div>",
         unsafe_allow_html=True,
     )
 
 with col2:
-    st.markdown("### ")
-    st.markdown("### ")
-    current_time = datetime.now().strftime("%H:%M:%S")
-    st.text(f"🕐 {current_time}")
+    st.caption(
+        datetime.now().strftime("%H:%M:%S")
+    )
 
-st.markdown("---")
 
 # ============================================================
-# INPUT SECTION
+# INPUT
 # ============================================================
 
 st.markdown("### 🔍 Ask Your Question")
 
 question = st.text_area(
-    "Enter your question:",
-    placeholder="Example: How can I make my Python API handle lots of users?",
+    "Question",
+    placeholder="Example: How does FastAPI handle high concurrency?",
     height=100,
     label_visibility="collapsed",
 )
 
-col1, col2, col3 = st.columns([2, 1, 1])
+col1, col2 = st.columns([3, 1])
 
 with col1:
     search_button = st.button(
         "🔍 Search & Generate Answer",
-        use_container_width=True,
         type="primary",
+        use_container_width=True,
     )
 
 with col2:
-    clear_button = st.button("🔄 Clear", use_container_width=True)
-
-with col3:
-    st.write("")
+    clear_button = st.button(
+        "🔄 Clear",
+        use_container_width=True,
+    )
 
 if clear_button:
     st.rerun()
 
+
 # ============================================================
-# PROCESSING
+# RUN PIPELINE
 # ============================================================
 
-if search_button and question.strip():
-    
+if search_button:
+
+    if not question.strip():
+        st.warning("Please enter a question.")
+        st.stop()
+
     st.markdown("---")
     st.markdown("### ⚙️ Pipeline Processing")
-    
-    # Create placeholders for progress
-    progress_placeholder = st.empty()
-    metrics_placeholder = st.empty()
-    pipeline_placeholder = st.empty()
-    result_placeholder = st.empty()
-    
-    # Start timer
-    start_time = time.time()
-    
-    # Run pipeline
+
     try:
-        with st.spinner("🔄 Running Advanced RAG Pipeline..."):
-            result = run_advanced_rag(question)
-        
-        end_time = time.time()
-        execution_time = round(end_time - start_time, 2)
-        
-        # ============================================================
-        # METRICS SECTION
-        # ============================================================
-        
-        with metrics_placeholder.container():
-            st.markdown("### 📊 Pipeline Metrics")
-            
-            col1, col2, col3, col4 = st.columns(4)
-            
-            with col1:
-                st.markdown(
-                    f"""
-                    <div class="metric-card">
-                        <div class="metric-label">Execution Time</div>
-                        <div class="metric-number">{execution_time}s</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
+        with st.spinner(
+            "Running optimized Advanced RAG..."
+        ):
+            result = asyncio.run(
+                run_advanced_rag(
+                    question.strip()
                 )
-            
-            with col2:
-                total_retrieved = result["pipeline_info"]["total_retrieved"]
-                st.markdown(
-                    f"""
-                    <div class="metric-card metric-card-orange">
-                        <div class="metric-label">Documents Retrieved</div>
-                        <div class="metric-number">{total_retrieved}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            
-            with col3:
-                reranked = result["pipeline_info"]["reranked_top_k"]
-                st.markdown(
-                    f"""
-                    <div class="metric-card metric-card-green">
-                        <div class="metric-label">After Reranking</div>
-                        <div class="metric-number">{reranked}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            
-            with col4:
-                compressed = result["pipeline_info"]["compressed_documents"]
-                st.markdown(
-                    f"""
-                    <div class="metric-card metric-card-blue">
-                        <div class="metric-label">Compressed Docs</div>
-                        <div class="metric-number">{compressed}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-        
+            )
+
+        # ====================================================
+        # RESULT DATA
+        # ====================================================
+
+        answer = result.get("answer", "")
+        sources = result.get("sources", [])
+        queries = result.get("queries", [])
+        metrics = result.get("metrics", {})
+
+        total_time = metrics.get("total", 0)
+        query_time = metrics.get(
+            "query_generation",
+            0,
+        )
+        retrieval_time = metrics.get(
+            "retrieval",
+            0,
+        )
+        rerank_time = metrics.get(
+            "reranking",
+            0,
+        )
+        compression_time = metrics.get(
+            "compression",
+            0,
+        )
+        final_answer_time = metrics.get(
+            "final_answer",
+            0,
+        )
+
+        # ====================================================
+        # PERFORMANCE
+        # ====================================================
+
+        st.markdown("### 📊 Performance")
+
+        col1, col2, col3, col4, col5 = st.columns(5)
+
+        with col1:
+            st.metric(
+                "Total",
+                f"{total_time:.2f}s",
+            )
+
+        with col2:
+            st.metric(
+                "Query",
+                f"{query_time:.2f}s",
+            )
+
+        with col3:
+            st.metric(
+                "Retrieval",
+                f"{retrieval_time:.2f}s",
+            )
+
+        with col4:
+            st.metric(
+                "Reranking",
+                f"{rerank_time:.2f}s",
+            )
+
+        with col5:
+            st.metric(
+                "Compression",
+                f"{compression_time:.2f}s",
+            )
+
+        st.caption(
+            f"Final answer generation: {final_answer_time:.2f}s"
+        )
+
+        # ====================================================
+        # PIPELINE STAGES
+        # ====================================================
+
+        st.markdown("### 🔬 Pipeline Stages")
+
+        with st.expander(
+            "1️⃣ Query Generation",
+            expanded=True,
+        ):
+            if queries:
+                for index, query in enumerate(
+                    queries,
+                    start=1,
+                ):
+                    st.write(
+                        f"**Query {index}:** {query}"
+                    )
+            else:
+                st.info("No queries generated.")
+
+            st.caption(
+                f"Stage time: {query_time:.2f}s"
+            )
+
+        with st.expander(
+            "2️⃣ Parallel Retrieval",
+            expanded=False,
+        ):
+            st.write(
+                "Generated queries were searched "
+                "in parallel."
+            )
+            st.caption(
+                f"Stage time: {retrieval_time:.2f}s"
+            )
+
+        with st.expander(
+            "3️⃣ Reranking",
+            expanded=False,
+        ):
+            st.write(
+                "Candidate documents were ranked "
+                "using the CrossEncoder."
+            )
+            st.caption(
+                f"Stage time: {rerank_time:.2f}s"
+            )
+
+        with st.expander(
+            "4️⃣ Parallel Compression",
+            expanded=False,
+        ):
+            st.write(
+                "Relevant content was extracted "
+                "from the top-ranked documents."
+            )
+            st.caption(
+                f"Stage time: {compression_time:.2f}s"
+            )
+
+        with st.expander(
+            "5️⃣ Final Answer",
+            expanded=False,
+        ):
+            st.write(
+                "The final LLM answer was generated "
+                "using the compressed context."
+            )
+            st.caption(
+                f"Stage time: {final_answer_time:.2f}s"
+            )
+
+        # ====================================================
+        # ANSWER
+        # ====================================================
+
         st.markdown("---")
-        
-        # ============================================================
-        # PIPELINE STAGES SECTION
-        # ============================================================
-        
-        with st.expander("📋 Pipeline Stages (Detailed)", expanded=False):
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.markdown("#### Original Question")
-                st.markdown(
-                    f"""
-                    <div class="pipeline-stage">
-                        <div class="stage-content">{question}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                
-                st.markdown("#### Stage 1️⃣: Query Rewriting")
-                rewritten = result["pipeline_info"]["rewritten_query"]
-                st.markdown(
-                    f"""
-                    <div class="pipeline-stage">
-                        <div class="stage-content"><strong>Optimized:</strong><br>{rewritten}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            
-            with col2:
-                st.markdown("#### Stage 2️⃣: Multi-Query Generation")
-                queries = result["pipeline_info"]["generated_queries"]
-                queries_str = "<br>".join([f"• {q}" for q in queries])
-                st.markdown(
-                    f"""
-                    <div class="pipeline-stage">
-                        <div class="stage-content"><strong>Generated Queries:</strong><br>{queries_str}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                
-                st.markdown("#### Stage 3️⃣: Reranking Summary")
-                st.markdown(
-                    f"""
-                    <div class="pipeline-stage">
-                        <div class="stage-content">
-                            <strong>Retrieval Summary:</strong><br>
-                            • Total Retrieved: {result['pipeline_info']['total_retrieved']}<br>
-                            • After Reranking: {result['pipeline_info']['reranked_top_k']}<br>
-                            • After Compression: {result['pipeline_info']['compressed_documents']}
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-        
-        st.markdown("---")
-        
-        # ============================================================
-        # ANSWER SECTION
-        # ============================================================
-        
         st.markdown("### ✅ Generated Answer")
-        
+
         st.markdown(
             f"""
             <div class="answer-box">
-                <div class="answer-text">{result['answer']}</div>
+                {answer}
             </div>
             """,
             unsafe_allow_html=True,
         )
-        
-        st.markdown("---")
-        
-        # ============================================================
-        # SOURCES SECTION
-        # ============================================================
-        
+
+        # ====================================================
+        # SOURCES
+        # ====================================================
+
         st.markdown("### 📚 Sources Used")
-        
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
-            for i, source in enumerate(result["sources"], 1):
-                # Extract filename from full path
-                filename = source.split("\\")[-1] if "\\" in source else source.split("/")[-1]
-                
+
+        if sources:
+            for index, source in enumerate(
+                sources,
+                start=1,
+            ):
+                filename = (
+                    source.split("\\")[-1]
+                    if "\\" in source
+                    else source.split("/")[-1]
+                )
+
                 st.markdown(
                     f"""
-                    <div class="source-card">
-                        <div style="display: flex; align-items: center;">
-                            <span style="font-size: 1.5rem; margin-right: 0.5rem;">📄</span>
-                            <div>
-                                <div class="source-name">{i}. {filename}</div>
-                                <div style="font-size: 0.8rem; color: #999;">{source}</div>
-                            </div>
-                        </div>
+                    <div class="source-box">
+                        📄 <strong>{index}. {filename}</strong>
+                        <br>
+                        <small>{source}</small>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
-        
-        with col2:
-            st.markdown("#### 📊 Summary")
-            st.metric("Total Sources", len(result["sources"]))
-            st.metric("Processing Time", f"{execution_time}s")
-            st.metric("Documents Analyzed", result["pipeline_info"]["total_retrieved"])
-        
-        st.markdown("---")
-        
-        # ============================================================
-        # EXPORT SECTION
-        # ============================================================
-        
-        st.markdown("### 💾 Export Results")
-        
-        col1, col2 = st.columns(2)
-        
+        else:
+            st.info("No source documents returned.")
+
+        # ====================================================
+        # SUMMARY
+        # ====================================================
+
+        st.markdown("### 📋 Summary")
+
+        col1, col2, col3 = st.columns(3)
+
         with col1:
-            # Prepare text export
-            export_text = f"""
-ADVANCED RAG PIPELINE - RESULTS
-Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+            st.metric(
+                "Generated Queries",
+                len(queries),
+            )
 
-QUESTION:
-{question}
+        with col2:
+            st.metric(
+                "Sources",
+                len(sources),
+            )
 
-ANSWER:
-{result['answer']}
+        with col3:
+            st.metric(
+                "Total Time",
+                f"{total_time:.2f}s",
+            )
 
-SOURCES:
-{chr(10).join([f'- {s}' for s in result['sources']])}
+        # ====================================================
+        # EXPORT
+        # ====================================================
 
-PIPELINE METRICS:
-- Execution Time: {execution_time}s
-- Documents Retrieved: {result['pipeline_info']['total_retrieved']}
-- After Reranking: {result['pipeline_info']['reranked_top_k']}
-- Compressed Documents: {result['pipeline_info']['compressed_documents']}
-"""
-            
+        st.markdown("### 💾 Export")
+
+        export_data = {
+            "question": question.strip(),
+            "answer": answer,
+            "queries": queries,
+            "sources": sources,
+            "metrics": metrics,
+        }
+
+        export_json = json.dumps(
+            export_data,
+            indent=2,
+            default=str,
+        )
+
+        export_text = (
+            "ADVANCED RAG PIPELINE\n\n"
+            f"QUESTION:\n{question.strip()}\n\n"
+            f"ANSWER:\n{answer}\n\n"
+            "GENERATED QUERIES:\n"
+            + "\n".join(
+                f"- {query}"
+                for query in queries
+            )
+            + "\n\nSOURCES:\n"
+            + "\n".join(
+                f"- {source}"
+                for source in sources
+            )
+            + "\n\nMETRICS:\n"
+            + "\n".join(
+                f"- {key}: {value:.2f}s"
+                if isinstance(value, (int, float))
+                else f"- {key}: {value}"
+                for key, value in metrics.items()
+            )
+        )
+
+        col1, col2 = st.columns(2)
+
+        with col1:
             st.download_button(
-                label="📄 Download as Text",
+                "📄 Download TXT",
                 data=export_text,
-                file_name=f"rag_result_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                file_name=(
+                    f"rag_result_"
+                    f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+                ),
                 mime="text/plain",
                 use_container_width=True,
             )
-        
+
         with col2:
-            # Prepare JSON export
-            import json
-            export_json = json.dumps(result, indent=2)
-            
             st.download_button(
-                label="📋 Download as JSON",
+                "📋 Download JSON",
                 data=export_json,
-                file_name=f"rag_result_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                file_name=(
+                    f"rag_result_"
+                    f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                ),
                 mime="application/json",
                 use_container_width=True,
             )
-    
-    except Exception as e:
-        st.error(f"❌ Error: {str(e)}")
-        st.info("Kripya apna sawal dobara likho ya baad mein try karo.")
 
-elif search_button and not question.strip():
-    st.warning("⚠️ Kripya ek sawal likho!")
+    except Exception as error:
+        st.error(
+            f"❌ Pipeline Error: {error}"
+        )
+        st.exception(error)
+
 
 # ============================================================
 # FOOTER
 # ============================================================
 
-st.markdown("---")
-st.markdown(
-    """
-    <div style='text-align: center; color: #999; font-size: 0.9rem;'>
-        Built with ❤️ using LangChain, ChromaDB, and Streamlit<br>
-        Advanced RAG Pipeline v1.0 | 2024
-    </div>
-    """,
-    unsafe_allow_html=True,
+st.divider()
+
+st.caption(
+    "Built with LangChain, ChromaDB, Gemini, "
+    "Sentence Transformers & Streamlit"
 )
